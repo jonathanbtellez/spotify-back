@@ -23,10 +23,8 @@ class AuthLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','max:255'],
-            'email' => ['required','unique:user','email'],
-            'password' => ['required','confirmed',Password::min(8)->letters()->numbers()->mixedCase()],
-            'birth_day' => ['required', 'date']
+            'email' => ['required','email'],
+            'password' => ['required',Password::min(8)->letters()->numbers()],
         ];
     }
 }

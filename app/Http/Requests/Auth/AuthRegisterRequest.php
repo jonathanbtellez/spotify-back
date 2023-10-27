@@ -26,7 +26,7 @@ class AuthRegisterRequest extends FormRequest
         return [
             'name' => ['required','string','max:255'],
             'email' => ['required','unique:users','email'],
-            'password' => ['required','confirmed',Password::min(8)->letters()->numbers()->mixedCase()],
+            'password' => ['required','confirmed',Password::min(8)->letters()->numbers()],
             'birth_day' => ['required', 'before:'.Carbon::now()->subYears(18)->format('Y-m-d')]
         ];
     }
