@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    return response()->json(['user'=> $request->user()], 201);
 });
 
 Route::post('/login', [AuthController::class,'login'])->name('login');
