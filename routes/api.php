@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\image\imageController;
+use App\Http\Controllers\Playlist\PlaylistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return response()->json(['user'=> $request->user()], 201);
 });
 
+Route::group(['prefix' => 'playlist', 'controller' => PlaylistController::class, 'middleware' => 'auth:sanctum'], function() {
+    Route::get('/', 'index');
+});
+
+Route::group(['prefix' => 'resources'], function() {
+    Route::group(['prefix' =>'images' , 'controller' => imageController::class,], function(){
+        Route::get('/{folder}/{filename}', 'show');
+    });
+});
+
 Route::post('/login', [AuthController::class,'login'])->name('login');
 Route::post('/register', [AuthController::class,'register']);
-

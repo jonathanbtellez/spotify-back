@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Image;
+use App\Models\Playlist;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -20,9 +24,10 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'birth_date' => Carbon::now()->subYears(18)->format('Y-m-d'),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+            'password' => 'a1234567', // password
+            'remember_token' => Str::random(20),
         ];
     }
 
@@ -35,4 +40,12 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function configure(){
+		return $this->afterCreating(function (User $user){
+			Playlist::factory(10)->userId($user)->create();
+            $image = new Image(['path' => 'user/default.jpg']);
+			$user->image()->save($image);
+		});
+	}
 }
