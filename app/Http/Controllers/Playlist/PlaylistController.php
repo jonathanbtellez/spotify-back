@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Playlist;
 
 use App\Http\Controllers\Controller;
+use App\Models\Artist;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PlaylistController extends Controller
 {
@@ -14,8 +16,22 @@ class PlaylistController extends Controller
      */
     public function index()
     {
-        $playlist = Playlist::where('user_id', Auth::user()->id)->with('tracks.image')->get();
-        return response()->json($playlist, 200);
+        $playlists = [];
+        $genres  = DB::select('select distinct genre from artists');
+        $idList = 0;
+
+        foreach ($genres as $genre) {
+
+            $playlist = Playlist::where('name', 'like', '%' . $genre->genre . '%')
+                ->Where('user_id', Auth::user()->id)
+                ->with('image')
+                ->limit(6)
+                ->get();
+
+            array_push($playlists, ['name' => $genre->genre, 'playlist' => $playlist, 'id' => $idList++]);
+        }
+
+        return response()->json($playlists, 200);
     }
 
     /**

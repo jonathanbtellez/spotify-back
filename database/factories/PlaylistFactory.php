@@ -27,6 +27,7 @@ class PlaylistFactory extends Factory
     {
         return [
             'name' => fake()->randomElement(['musica_clasica', 'jazz', 'blues', 'gospel', 'soul', 'pop', 'rock', 'metal', 'salsa']) . ' mix',
+            'description' => fake()->randomElement([fake()->realText(10), fake()->realText(15), fake()->realText(50)]),
         ];
     }
 
