@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Playlist;
 
 use App\Http\Controllers\Controller;
-use App\Models\Artist;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +17,13 @@ class PlaylistController extends Controller
     {
         $playlists = [];
         $genres  = DB::select('select distinct genre from artists');
-        $idList = 0;
+        $lastPlaylist = Playlist::where('user_id', Auth::user()->id)
+            ->with('image')
+            ->limit(6)
+            ->get();
 
         foreach ($genres as $genre) {
+
 
             $playlist = Playlist::where('name', 'like', '%' . $genre->genre . '%')
                 ->Where('user_id', Auth::user()->id)
@@ -28,10 +31,14 @@ class PlaylistController extends Controller
                 ->limit(6)
                 ->get();
 
-            array_push($playlists, ['name' => $genre->genre, 'playlist' => $playlist, 'id' => $idList++]);
+
+            array_push($playlists, ['name' => $genre->genre, 'playlist' => $playlist, 'id' => uuid_create()]);
         }
 
-        return response()->json($playlists, 200);
+        return response()->json([
+            'playlist' => $playlists,
+            'lastPlaylist' => $lastPlaylist
+        ], 200);
     }
 
     /**
@@ -53,9 +60,9 @@ class PlaylistController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Playlist $playlist)
     {
-        //
+        return response()->json($playlist->load('tracks.album.artist', 'image'), 200);
     }
 
     /**

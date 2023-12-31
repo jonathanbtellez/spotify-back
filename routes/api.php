@@ -23,12 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'playlist', 'controller' => PlaylistController::class, 'middleware' => 'auth:sanctum'], function() {
     Route::get('/', 'index');
-});
+    Route::get('/{playlist}', 'show');
 
-Route::group(['prefix' => 'resources'], function() {
-    Route::group(['prefix' =>'images' , 'controller' => imageController::class,], function(){
-        Route::get('/{folder}/{filename}', 'show');
-    });
 });
 
 Route::post('/login', [AuthController::class,'login'])->name('login');

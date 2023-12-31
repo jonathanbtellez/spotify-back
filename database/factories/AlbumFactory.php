@@ -14,11 +14,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AlbumFactory extends Factory
 {
-    public function artistId($artist){
-		return $this->state([
-			'artist_id' => $artist->id
-		]);
-	 }
+    public function artistId($artist)
+    {
+        return $this->state([
+            'artist_id' => $artist->id
+        ]);
+    }
     /**
      * Define the model's default state.
      *
@@ -38,13 +39,49 @@ class AlbumFactory extends Factory
         ];
     }
 
-    public function configure(){
-		return $this->afterCreating(function (Album $album){
-			Track::factory(10)->albumId($album)->create();
+    public function configure()
+    {
+        return $this->afterCreating(function (Album $album) {
+            Track::factory(10)->albumId($album)->create();
             $artist = Artist::find($album->artist_id);
-            $image = new Image(['path' => $artist->genre.'/default.jpg']);
-			$album->image()->save($image);
-		});
-	}
+            if ($artist->genre === 'blues') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968137/blues/default.jpg']);
+            }
 
+            if ($artist->genre === 'gospel') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968145/gospel/default.jpg']);
+            }
+
+            if ($artist->genre === 'jazz') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968140/jazz/default.jpg']);
+            }
+
+            if ($artist->genre === 'metal') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968150/metal/default_tegvtb.jpg']);
+            }
+
+            if ($artist->genre === 'musica_clasica') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968145/musica_clasica/default_pdqf08.jpg']);
+            }
+
+            if ($artist->genre === 'pop') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968131/pop/default_tucahr.jpg']);
+            }
+
+            if ($artist->genre === 'rock') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968136/rock/default_v9l7pk.jpg']);
+            }
+
+            if ($artist->genre === 'salsa') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968134/salsa/default_wbgaa4.jpg']);
+            }
+
+            if ($artist->genre === 'soul') {
+                $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968141/soul/default_qpl7lu.jpg']);
+            }
+            
+
+            $album->image()->save($image);
+        });
+    }
 }

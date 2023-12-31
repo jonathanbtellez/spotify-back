@@ -28,7 +28,7 @@ class ArtistFactory extends Factory
     public function configure(){
 		return $this->afterCreating(function (Artist $artist){
 			Album::factory(8)->artistId($artist)->create();
-            $image = new Image(['path' => 'user/default.jpg']);
+            $image = new Image(['path' => 'https://res.cloudinary.com/dso0xjfh8/image/upload/v1703968141/user/default_bi2ect.jpg']);
 			$artist->image()->save($image);
 		});
 	}
