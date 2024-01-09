@@ -62,7 +62,7 @@ class PlaylistController extends Controller
      */
     public function show(Playlist $playlist)
     {
-        return response()->json($playlist->load('tracks.album.artist', 'image'), 200);
+        return response()->json($playlist->load('tracks.image','tracks.album.artist', 'image'), 200);
     }
 
     /**
